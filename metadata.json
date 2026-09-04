@@ -1,0 +1,6 @@
+{
+  "name": "CSE Teachers' Day – QR Hunt",
+    "description": "A fast, lightweight, standalone QR hunt reveal application for CSE Teachers' Day with glowing neon reveal cards and celebratory confetti.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

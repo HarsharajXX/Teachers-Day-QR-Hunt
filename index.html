@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CSE Teachers' Day – QR Hunt 🎉</title>
+    <meta name="description" content="Instant standalone teacher reveal card for CSE Teachers' Day QR hunt." />
+    <meta property="og:title" content="CSE Teachers' Day – QR Hunt 🎉" />
+    <meta property="og:description" content="Instant standalone teacher reveal card for CSE Teachers' Day QR hunt." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <style>
+      /* ==========================================================================
+         DARK MODERN CSE THEME
+         Deep navy canvas, glowing neon blue/purple accents, crisp typography
+         ========================================================================== */
+      :root {
+        --bg-deep: #050814;
+        --bg-surface: rgba(13, 20, 38, 0.78);
+        --accent-neon-blue: #00e5ff;
+        --accent-purple: #a855f7;
+        --accent-indigo: #6366f1;
+        --text-pure: #ffffff;
+        --text-sub: #94a3b8;
+        --text-muted: #64748b;
+        --border-glass: rgba(255, 255, 255, 0.12);
+        --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-deep);
+        color: var(--text-pure);
+        font-family: var(--font-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Ambient Neon Glows */
+      .ambient-glows {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(110px);
+        opacity: 0.8;
+      }
+
+      .glow-orb-1 {
+        top: -15%;
+        left: -15%;
+        width: 60vw;
+        height: 60vw;
+        max-width: 500px;
+        max-height: 500px;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, transparent 70%);
+      }
+
+      .glow-orb-2 {
+        bottom: -15%;
+        right: -15%;
+        width: 65vw;
+        height: 65vw;
+        max-width: 560px;
+        max-height: 560px;
+        background: radial-gradient(circle, rgba(0, 229, 255, 0.22) 0%, transparent 70%);
+      }
+
+      /* Particle Canvas for Celebration Burst */
+      #fx-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 999;
+      }
+
+      /* Sticky Top Navbar */
+      .top-navbar {
+        width: 100%;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        background: rgba(8, 13, 26, 0.65);
+        border-bottom: 1px solid var(--border-glass);
+        padding: 14px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .nav-icon-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-neon-blue));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+        color: #ffffff;
+      }
+
+      .nav-text h1 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        background: linear-gradient(to right, #ffffff, #cbd5e1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-text p {
+        font-size: 0.72rem;
+        color: var(--text-sub);
+      }
+
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.35);
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--accent-neon-blue);
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--accent-neon-blue);
+        box-shadow: 0 0 8px var(--accent-neon-blue);
+        animation: pulseDot 2s infinite ease-in-out;
+      }
+
+      @keyframes pulseDot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.75); }
+      }
+
+      /* Container */
+      .content-wrapper {
+        width: 100%;
+        max-width: 520px;
+        padding: 28px 18px 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* ==========================================================================
+         HIGH-ENERGY REVEAL CARD
+         ========================================================================== */
+      .card-halo-wrap {
+        position: relative;
+        width: 100%;
+      }
+
+      .card-back-glow {
+        position: absolute;
+        inset: -3px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-neon-blue), var(--accent-indigo));
+        border-radius: 26px;
+        filter: blur(16px);
+        opacity: 0.55;
+        animation: glowShift 6s ease-in-out infinite alternate;
+      }
+
+      @keyframes glowShift {
+        0% { opacity: 0.4; filter: blur(14px); }
+        100% { opacity: 0.7; filter: blur(20px); }
+      }
+
+      .reveal-card {
+        width: 100%;
+        background: var(--bg-surface);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        border-radius: 24px;
+        padding: 36px 24px 32px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+        animation: revealEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes revealEntrance {
+        0% {
+          opacity: 0;
+          transform: translateY(30px) scale(0.92);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .code-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 9999px;
+        background: rgba(0, 229, 255, 0.12);
+        border: 1px solid rgba(0, 229, 255, 0.4);
+        color: var(--accent-neon-blue);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        margin-bottom: 22px;
+      }
+
+      /* Glowing Circular Photo */
+      .photo-container {
+        position: relative;
+        width: 170px;
+        height: 170px;
+        margin: 0 auto 24px;
+      }
+
+      .photo-aura {
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent-neon-blue), var(--accent-purple), #ec4899, var(--accent-neon-blue));
+        background-size: 300% 300%;
+        animation: rotateAura 5s linear infinite;
+        filter: blur(12px);
+        opacity: 0.75;
+      }
+
+      @keyframes rotateAura {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .photo-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 3.5px solid var(--accent-neon-blue);
+        box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+        padding: 3px;
+        background: #0d1426;
+        overflow: hidden;
+      }
+
+      .photo-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #080d1a;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .teacher-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+      }
+
+      .teacher-photo:hover {
+        transform: scale(1.06);
+      }
+
+      .avatar-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+        color: var(--accent-neon-blue);
+        font-size: 2.2rem;
+        font-weight: 800;
+        font-family: var(--font-mono);
+      }
+
+      .teacher-name {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+        margin-bottom: 8px;
+      }
+
+      .teacher-designation {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent-neon-blue);
+        margin-bottom: 6px;
+      }
+
+      .teacher-dept {
+        font-size: 0.82rem;
+        font-family: var(--font-mono);
+        color: var(--text-sub);
+        margin-bottom: 20px;
+      }
+
+      .specialization-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(168, 85, 247, 0.14);
+        border: 1px solid rgba(168, 85, 247, 0.35);
+        color: #d8b4fe;
+        font-size: 0.78rem;
+        padding: 5px 14px;
+        border-radius: 9999px;
+        margin-bottom: 24px;
+      }
+
+      .action-row {
+        display: flex;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 13px 18px;
+        border-radius: 12px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: none;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: #ffffff;
+        color: #050814;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+      }
+
+      .btn-primary:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+      }
+
+      .btn-secondary {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        backdrop-filter: blur(12px);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(30, 41, 59, 0.8);
+      }
+
+      /* ==========================================================================
+         CLEAN LANDING PAGE (WHEN NO ID IS PROVIDED)
+         ========================================================================== */
+      .welcome-card {
+        width: 100%;
+        background: var(--bg-surface);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        border-radius: 24px;
+        padding: 42px 24px 36px;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+        animation: revealEntrance 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .scanner-graphic {
+        width: 86px;
+        height: 86px;
+        margin: 0 auto 24px;
+        background: rgba(0, 229, 255, 0.08);
+        border: 1.5px solid rgba(0, 229, 255, 0.35);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 24px rgba(0, 229, 255, 0.2);
+      }
+
+      .laser-beam {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2.5px;
+        background: var(--accent-neon-blue);
+        box-shadow: 0 0 12px var(--accent-neon-blue);
+        animation: laserScan 2.2s ease-in-out infinite alternate;
+      }
+
+      @keyframes laserScan {
+        0% { top: 12%; }
+        100% { top: 86%; }
+      }
+
+      .welcome-headline {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 12px;
+        letter-spacing: -0.4px;
+        line-height: 1.3;
+      }
+
+      .welcome-subtext {
+        font-size: 0.95rem;
+        color: var(--text-sub);
+        line-height: 1.6;
+        max-width: 380px;
+        margin: 0 auto 28px;
+      }
+
+      .instruction-box {
+        background: rgba(5, 8, 20, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 16px;
+        text-align: left;
+        margin-bottom: 24px;
+      }
+
+      .instruction-step {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+        margin-bottom: 10px;
+      }
+
+      .instruction-step:last-child {
+        margin-bottom: 0;
+      }
+
+      .step-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(168, 85, 247, 0.25);
+        color: #d8b4fe;
+        border: 1px solid rgba(168, 85, 247, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        flex-shrink: 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 440px) {
+        .content-wrapper {
+          padding: 20px 14px 40px;
+        }
+        .reveal-card, .welcome-card {
+          padding: 28px 18px 26px;
+        }
+        .teacher-name {
+          font-size: 1.6rem;
+        }
+        .photo-container {
+          width: 150px;
+          height: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Ambient Neon Blur Orbs -->
+    <div class="ambient-glows" aria-hidden="true">
+      <div class="glow-orb glow-orb-1"></div>
+      <div class="glow-orb glow-orb-2"></div>
+    </div>
+
+    <!-- Celebration FX Canvas -->
+    <canvas id="fx-canvas"></canvas>
+
+    <!-- Top Sticky Header -->
+    <header class="top-navbar">
+      <div class="nav-left">
+        <div class="nav-icon-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+            <path d="M7 17v.01"></path>
+            <path d="M17 7v.01"></path>
+            <path d="M7 7v.01"></path>
+            <path d="M17 17v.01"></path>
+          </svg>
+        </div>
+        <div class="nav-text">
+          <h1>CSE Teachers' Day</h1>
+          <p>QR Hunt 2026 • Live Reveal</p>
+        </div>
+      </div>
+      <div class="live-pill">
+        <span class="live-dot"></span>
+        <span>Live</span>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="content-wrapper">
+      <main id="app-root" style="width: 100%;">
+        <!-- Rendered instantly via JavaScript based on ?id= -->
+      </main>
+    </div>
+
+    <script>
+      /* =========================================================================
+         TEACHER DATABASE (20 TEACHERS)
+         SWAP IN REAL FACULTY NAMES, DESIGNATIONS, AND PHOTO URLS HERE!
+         ========================================================================= */
+      const TEACHERS_DATABASE = {
+        // Teacher 1
+        1: {
+          id: 1,
+          name: "Dr. Rajesh Sharma",
+          designation: "Professor & Head of Department",
+          department: "Department of Computer Science & Engineering",
+          specialization: "Algorithms & Computational Complexity",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Dr.+Rajesh+Sharma",
+          initials: "RS"
+        },
+        // Teacher 2
+        2: {
+          id: 2,
+          name: "Dr. Priya Venkatesh",
+          designation: "Associate Professor",
+          department: "AI & Cognitive Computing Lab",
+          specialization: "Deep Learning & NLP",
+          photo: "https://via.placeholder.com/200/0f172a/a855f7?text=Dr.+Priya+Venkatesh",
+          initials: "PV"
+        },
+        // Teacher 3
+        3: {
+          id: 3,
+          name: "Prof. Vikram Mehta",
+          designation: "Assistant Professor",
+          department: "Computer Networks & Security Cell",
+          specialization: "Cybersecurity & Cryptography",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Prof.+Vikram+Mehta",
+          initials: "VM"
+        },
+        // Teacher 4
+        4: {
+          id: 4,
+          name: "Dr. Ananya Sen",
+          designation: "Associate Professor",
+          department: "Cloud Systems & Microservices Hub",
+          specialization: "Distributed Systems & Cloud Computing",
+          photo: "https://via.placeholder.com/200/0f172a/ec4899?text=Dr.+Ananya+Sen",
+          initials: "AS"
+        },
+        // Teacher 5
+        5: {
+          id: 5,
+          name: "Prof. Arun Kumar",
+          designation: "Assistant Professor",
+          department: "Data Engineering Center",
+          specialization: "Big Data & High Performance DBs",
+          photo: "https://via.placeholder.com/200/0f172a/10b981?text=Prof.+Arun+Kumar",
+          initials: "AK"
+        },
+        // Teacher 6
+        6: {
+          id: 6,
+          name: "Dr. Meera Nambiar",
+          designation: "Professor",
+          department: "Computer Vision & Medical Imaging",
+          specialization: "Image Processing & Robotics",
+          photo: "https://via.placeholder.com/200/0f172a/f59e0b?text=Dr.+Meera+Nambiar",
+          initials: "MN"
+        },
+        // Teacher 7
+        7: {
+          id: 7,
+          name: "Prof. Sanjay Kulkarni",
+          designation: "Assistant Professor",
+          department: "Embedded Systems & IoT Lab",
+          specialization: "RTOS & Firmware Engineering",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Prof.+Sanjay+Kulkarni",
+          initials: "SK"
+        },
+        // Teacher 8
+        8: {
+          id: 8,
+          name: "Dr. Kavita Raman",
+          designation: "Associate Professor",
+          department: "Human-Computer Interaction Group",
+          specialization: "UI/UX & Web Engineering",
+          photo: "https://via.placeholder.com/200/0f172a/a855f7?text=Dr.+Kavita+Raman",
+          initials: "KR"
+        },
+        // Teacher 9
+        9: {
+          id: 9,
+          name: "Prof. Deepak Nair",
+          designation: "Assistant Professor",
+          department: "Theoretical Computer Science",
+          specialization: "Compiler Construction & Automata",
+          photo: "https://via.placeholder.com/200/0f172a/3b82f6?text=Prof.+Deepak+Nair",
+          initials: "DN"
+        },
+        // Teacher 10
+        10: {
+          id: 10,
+          name: "Dr. Sunita Banerjee",
+          designation: "Senior Professor",
+          department: "Information Theory & Security",
+          specialization: "Quantum Computing & Information Theory",
+          photo: "https://via.placeholder.com/200/0f172a/d946ef?text=Dr.+Sunita+Banerjee",
+          initials: "SB"
+        },
+        // Teacher 11
+        11: {
+          id: 11,
+          name: "Dr. Ramesh Chander",
+          designation: "Associate Professor",
+          department: "Software Engineering Division",
+          specialization: "Agile Architectures & DevOps",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Dr.+Ramesh+Chander",
+          initials: "RC"
+        },
+        // Teacher 12
+        12: {
+          id: 12,
+          name: "Prof. Sneha Deshmukh",
+          designation: "Assistant Professor",
+          department: "Data Analytics & Mining Lab",
+          specialization: "Predictive Analytics & Statistics",
+          photo: "https://via.placeholder.com/200/0f172a/a855f7?text=Prof.+Sneha+Deshmukh",
+          initials: "SD"
+        },
+        // Teacher 13
+        13: {
+          id: 13,
+          name: "Dr. Alok Verma",
+          designation: "Professor",
+          department: "Parallel Computing Lab",
+          specialization: "GPU Computing & Multi-threading",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Dr.+Alok+Verma",
+          initials: "AV"
+        },
+        // Teacher 14
+        14: {
+          id: 14,
+          name: "Prof. Pooja Hegde",
+          designation: "Assistant Professor",
+          department: "Machine Intelligence Cell",
+          specialization: "Reinforcement Learning",
+          photo: "https://via.placeholder.com/200/0f172a/ec4899?text=Prof.+Pooja+Hegde",
+          initials: "PH"
+        },
+        // Teacher 15
+        15: {
+          id: 15,
+          name: "Dr. Manoj Joshi",
+          designation: "Associate Professor",
+          department: "Network Architecture Group",
+          specialization: "Software Defined Networking",
+          photo: "https://via.placeholder.com/200/0f172a/10b981?text=Dr.+Manoj+Joshi",
+          initials: "MJ"
+        },
+        // Teacher 16
+        16: {
+          id: 16,
+          name: "Prof. Divya Swaminathan",
+          designation: "Assistant Professor",
+          department: "Mobile Applications Lab",
+          specialization: "Cross-Platform Systems",
+          photo: "https://via.placeholder.com/200/0f172a/f59e0b?text=Prof.+Divya+S",
+          initials: "DS"
+        },
+        // Teacher 17
+        17: {
+          id: 17,
+          name: "Dr. Tarun Saxena",
+          designation: "Associate Professor",
+          department: "Cyber Defense Research",
+          specialization: "Malware Analysis & Forensics",
+          photo: "https://via.placeholder.com/200/0f172a/00e5ff?text=Dr.+Tarun+Saxena",
+          initials: "TS"
+        },
+        // Teacher 18
+        18: {
+          id: 18,
+          name: "Prof. Neha Kapoor",
+          designation: "Assistant Professor",
+          department: "Bioinformatics Computing Lab",
+          specialization: "Genomic Sequences & Algorithms",
+          photo: "https://via.placeholder.com/200/0f172a/a855f7?text=Prof.+Neha+Kapoor",
+          initials: "NK"
+        },
+        // Teacher 19
+        19: {
+          id: 19,
+          name: "Dr. Harish Patel",
+          designation: "Professor",
+          department: "Operating Systems & Virtualization",
+          specialization: "Kernel Design & Hypervisors",
+          photo: "https://via.placeholder.com/200/0f172a/3b82f6?text=Dr.+Harish+Patel",
+          initials: "HP"
+        },
+        // Teacher 20
+        20: {
+          id: 20,
+          name: "Prof. Ritu Goswami",
+          designation: "Assistant Professor",
+          department: "Ethics & Emerging Technologies",
+          specialization: "AI Ethics & Trustworthy Computing",
+          photo: "https://via.placeholder.com/200/0f172a/d946ef?text=Prof.+Ritu+Goswami",
+          initials: "RG"
+        }
+      };
+
+      /* =========================================================================
+         LIGHTWEIGHT CELEBRATION PARTICLE BURST
+         Zero dependencies, 60fps HTML5 canvas
+         ========================================================================= */
+      const fxCanvas = document.getElementById("fx-canvas");
+      const ctx = fxCanvas.getContext("2d");
+      let animationFrameId = null;
+
+      function resizeFxCanvas() {
+        fxCanvas.width = window.innerWidth;
+        fxCanvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeFxCanvas);
+      resizeFxCanvas();
+
+      function triggerCelebrationBurst() {
+        resizeFxCanvas();
+        cancelAnimationFrame(animationFrameId);
+
+        const colors = ["#00e5ff", "#a855f7", "#ec4899", "#38bdf8", "#facc15", "#ffffff"];
+        const particleCount = window.innerWidth < 480 ? 70 : 110;
+        const particles = [];
+
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: window.innerWidth * 0.5 + (Math.random() - 0.5) * 60,
+            y: window.innerHeight * 0.35 + (Math.random() - 0.5) * 40,
+            vx: (Math.random() - 0.5) * 16,
+            vy: (Math.random() * -14) - 4,
+            size: Math.random() * 8 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 10,
+            gravity: 0.4,
+            drag: 0.96,
+            opacity: 1,
+            fadeRate: 0.009 + Math.random() * 0.008
+          });
+        }
+
+        const start = Date.now();
+
+        function step() {
+          ctx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+          let active = false;
+
+          for (let p of particles) {
+            p.vx *= p.drag;
+            p.vy += p.gravity;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rotation += p.rotationSpeed;
+            p.opacity -= p.fadeRate;
+
+            if (p.opacity > 0 && p.y < fxCanvas.height + 50) {
+              active = true;
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate((p.rotation * Math.PI) / 180);
+              ctx.fillStyle = p.color;
+              ctx.globalAlpha = Math.max(0, p.opacity);
+              ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+              ctx.restore();
+            }
+          }
+
+          if (active && Date.now() - start < 3500) {
+            animationFrameId = requestAnimationFrame(step);
+          } else {
+            ctx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+          }
+        }
+
+        step();
+      }
+
+      /* =========================================================================
+         DOM RENDERING & ROUTING
+         ========================================================================= */
+      const appRoot = document.getElementById("app-root");
+
+      function escapeHTML(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      // 1. High-Energy Reveal Card
+      function renderRevealCard(teacher) {
+        appRoot.innerHTML = `
+          <div class="card-halo-wrap">
+            <div class="card-back-glow"></div>
+            <div class="reveal-card">
+              <div class="code-badge">
+                <span>⚡</span>
+                <span>QR Code #${teacher.id} Discovered</span>
+              </div>
+
+              <div class="photo-container">
+                <div class="photo-aura"></div>
+                <div class="photo-ring">
+                  <div class="photo-inner">
+                    <img 
+                      src="${teacher.photo}" 
+                      alt="${escapeHTML(teacher.name)}" 
+                      class="teacher-photo"
+                      onerror="this.style.display='none'; document.getElementById('fallback-${teacher.id}').style.display='flex';"
+                    />
+                    <div class="avatar-fallback" id="fallback-${teacher.id}" style="display: none;">
+                      ${teacher.initials}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h2 class="teacher-name">${escapeHTML(teacher.name)}</h2>
+              <div class="teacher-designation">${escapeHTML(teacher.designation)}</div>
+              <div class="teacher-dept">${escapeHTML(teacher.department)}</div>
+
+              <div class="specialization-pill">
+                <span>💡</span>
+                <span>${escapeHTML(teacher.specialization)}</span>
+              </div>
+
+              <div class="action-row">
+                <button type="button" class="btn btn-secondary" id="btn-burst">
+                  <span>🎉 Celebrate</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btn-home">
+                  <span>🔍 Scan Next</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("btn-burst").addEventListener("click", () => {
+          triggerCelebrationBurst();
+        });
+
+        document.getElementById("btn-home").addEventListener("click", () => {
+          window.history.pushState({}, "", window.location.pathname);
+          init();
+        });
+
+        // Trigger confetti particle burst instantly upon card reveal
+        triggerCelebrationBurst();
+      }
+
+      // 2. Clean Landing Screen (when no ID is in URL)
+      function renderWelcomeScreen(customMessage = null) {
+        appRoot.innerHTML = `
+          <div class="welcome-card">
+            <div class="scanner-graphic">
+              <div class="laser-beam"></div>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <path d="M7 17v.01"></path>
+                <path d="M17 7v.01"></path>
+                <path d="M7 7v.01"></path>
+                <path d="M17 17v.01"></path>
+              </svg>
+            </div>
+
+            <h2 class="welcome-headline">
+              ${customMessage ? 'QR Code Not Found' : 'Scan any QR code on the board to start!'}
+            </h2>
+
+            <p class="welcome-subtext">
+              ${customMessage ? customMessage : 'Point your phone camera at any physical QR code on the CSE Teachers’ Day poster to instantly reveal the hidden faculty mentor.'}
+            </p>
+
+            <div class="instruction-box">
+              <div class="instruction-step">
+                <span class="step-dot">1</span>
+                <span>Locate the CSE Teachers' Day poster in the corridor.</span>
+              </div>
+              <div class="instruction-step">
+                <span class="step-dot">2</span>
+                <span>Scan any numbered QR code (#1 to #20) using your camera.</span>
+              </div>
+              <div class="instruction-step">
+                <span class="step-dot">3</span>
+                <span>Instantly reveals the faculty photo, name, and designation!</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      /* =========================================================================
+         INITIALIZATION CONTROLLER
+         Pure URL param lookup. No localStorage, no attempt limits, no tracking.
+         ========================================================================= */
+      function init() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rawId = urlParams.get("id");
+
+        if (!rawId) {
+          renderWelcomeScreen();
+          return;
+        }
+
+        const id = parseInt(rawId, 10);
+        const teacher = TEACHERS_DATABASE[id];
+
+        if (!teacher) {
+          renderWelcomeScreen(`QR Code #${rawId} is not registered in the Teachers' Day database. Try scanning codes #1 to #20 on the board!`);
+          return;
+        }
+
+        renderRevealCard(teacher);
+      }
+
+      // Run on page load
+      init();
+
+      // Support browser back/forward history navigation
+      window.addEventListener("popstate", () => {
+        init();
+      });
+    </script>
+  </body>
+</html>
